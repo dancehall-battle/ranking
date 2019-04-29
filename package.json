@@ -1,0 +1,17 @@
+{
+  "name": "dhb-ranking",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "csv-parse": "^4.4.1",
+    "date-fns": "^2.0.0-alpha.27",
+    "follow-redirects": "^1.7.0"
+  }
+}
