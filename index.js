@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const http = require('follow-redirects').https;
 const csvParse = require('csv-parse');
 const {format, differenceInMonths, isAfter, isBefore, subMonths} = require('date-fns');
@@ -60,8 +62,16 @@ function getRankings(csv) {
 
   let dancers = {};
   let countries = {};
+  let stopDate;
 
-  const stopDate = new Date('2019-05-01');
+  if (process.argv.length > 2) {
+    stopDate = new Date(process.argv[2]);
+  } else {
+    stopDate = new Date();
+  }
+
+  console.log(stopDate);
+
   const startDate = subMonths(stopDate, 12);
 
   csv.forEach(battle => {
