@@ -1,164 +1,152 @@
-#!/usr/bin/env node
-
-const http = require('follow-redirects').https;
-const csvParse = require('csv-parse');
+const {Client} = require('graphql-ld/index');
+const {QueryEngineComunica} = require('graphql-ld-comunica/index');
+const {filterLevel}  = require('./lib/utils');
 const {format, differenceInMonths, isAfter, isBefore, subMonths} = require('date-fns');
 
-function calculateRanking() {
-  return new Promise((resolve, reject) => {
+// Define a JSON-LD context
+const context = {
+  "@context": {
+    "name":  { "@id": "http://schema.org/name" },
+    "start":  { "@id": "http://schema.org/startDate" },
+    "end":    { "@id": "http://schema.org/endDate" },
+    "wins":    { "@reverse": "https://dancebattle.org/ontology/hasWinner" },
+    "level":    { "@id": "https://dancebattle.org/ontology/level" },
+    "participants":    { "@id": "https://dancebattle.org/ontology/amountOfParticipants" },
+    "Dancer": { "@id": "https://dancebattle.org/ontology/Dancer" }
+  }
+};
 
-    http.get('https://docs.google.com/spreadsheets/d/e/2PACX-1vSxY8ZiZPUWEBp-vt26DfLDio4aZp4-7l8x24BbwtOUxeloe9411giVTP5UmMvg60tvZWHQ8J5FP31V/pub?gid=0&single=true&output=csv',
-      (res) => {
-        const {statusCode} = res;
+// Create a GraphQL-LD client based on a client-side Comunica engine
+const comunicaConfig = {
+  sources: [
+    { type: "hypermedia", value: "https://data.dancehallbattle.org/data" },
+  ],
+};
+const client = new Client({ context, queryEngine: new QueryEngineComunica(comunicaConfig) });
 
-        if (statusCode === 200) {
-          res.setEncoding('utf8');
-          let rawData = '';
-          res.on('data', (chunk) => {
-            rawData += chunk;
-          });
-          res.on('end', async () => {
-            csvParse(rawData, {
-              comment: '#',
-              columns: true
+// Define a query
+const query = `
+  query { ... on Dancer {
+    name @single
+    wins {
+      level @single
+      start @single
+      end @single
+      participants @single
+    }
+    }
+  }`;
 
-            }, (err, output) => {
-              if (err) {
-                reject(err);
-              } else {
-                getRankings(output);
-              }
-            });
-          });
-        } else {
-          console.error(statusCode);
-          console.error('CSV file could not be downloaded. Quiting.');
-          // consume response data to free up memory
-          res.resume();
-          process.exit(1);
-        }
-      }).on('error', (e) => {
-      console.error(`Got error: ${e.message}`);
-      process.exit(1);
+// Points per month
+const points = {
+  1: 18,
+  2: 17,
+  3: 16,
+  4: 13,
+  5: 12,
+  6: 11,
+  7: 8,
+  8: 7,
+  9: 6,
+  10: 3,
+  11: 2,
+  12: 1
+};
+
+
+main();
+
+async function main() {
+  // Execute the query
+  let dancers = await executeQuery(query);
+  //console.log(data);
+  dancers = filterLevel(dancers);
+  dancers = filterDates(dancers, new Date('2018-07-25'), new Date('2019-07-25'));
+  dancers = dancers.filter(dancer => dancer.wins.length > 0);
+  //console.log(dancers);
+  const dancerToPoints = getPoints(dancers);
+  const rankingArray = [];
+  const keys = Object.keys(dancerToPoints);
+
+  keys.forEach(key => {
+    rankingArray.push({name: key, points: dancerToPoints[key]});
+  });
+
+  rankingArray.sort((a, b) => {
+    if (a.points < b.points) {
+      return 1;
+    } else if (a.points > b.points) {
+      return -1;
+    } else {
+      return 0;
+    }
+  });
+
+  setRankings(rankingArray);
+  printAsCSV(rankingArray);
+}
+
+async function executeQuery(query){
+  const {data} = await client.query({ query });
+
+  return data;
+}
+
+function getPoints(dancers) {
+  const dancerToPoints = {};
+
+  dancers.forEach(dancer => {
+    dancer.wins.forEach(win => {
+      const diff = differenceInMonths(new Date(), new Date(win.end)) + 1;
+      //console.log(diff);
+
+      const pointsGained = points[diff];
+
+      if (!dancerToPoints[dancer.name]) {
+        dancerToPoints[dancer.name] = 0
+      }
+
+      dancerToPoints[dancer.name] += pointsGained / parseInt(win.participants);
     });
   });
+
+  return dancerToPoints;
 }
 
-function getRankings(csv) {
-  const points = {
-    1: 18,
-    2: 17,
-    3: 16,
-    4: 13,
-    5: 12,
-    6: 11,
-    7: 8,
-    8: 7,
-    9: 6,
-    10: 3,
-    11: 2,
-    12: 1
-  };
+function setRankings(rankingArray) {
+  let currentRank = 1;
+  let latestPoints = null;
+  let ties = 0;
 
-  let dancers = {};
-  let countries = {};
-  let stopDate;
-
-  if (process.argv.length > 2) {
-    stopDate = new Date(process.argv[2]);
-  } else {
-    stopDate = new Date();
-  }
-
-  console.log(stopDate);
-
-  const startDate = subMonths(stopDate, 12);
-
-  csv.forEach(battle => {
-    const date = new Date(battle.date);
-
-    if (isBefore(date, stopDate) && isAfter(date, startDate) && battle.winner !== '' && (battle.who.indexOf('all') !== -1 || battle.who.indexOf('pro') !== -1 )) {
-      console.log(date);
-      console.log(stopDate);
-      console.log(differenceInMonths(stopDate, date) + 1);
-      const pointsGained = points[differenceInMonths(stopDate, date) + 1];
-      const winner = battle.winner + ` (${battle.winner_country})`;
-
-      if (!dancers[winner]) {
-        dancers[winner] = 0;
-      }
-
-      if (battle.winner2 !== '') {
-        const winner2 = battle.winner2 + ` (${battle.winner2_country})`;
-        dancers[winner] += pointsGained / 2;
-
-        if (!dancers[winner2]) {
-          dancers[winner2] = 0;
-        }
-
-        dancers[winner2] += pointsGained / 2;
-      } else {
-        dancers[winner] += pointsGained;
-      }
-
-      if (battle.winner_country !== '') {
-        if (!countries[battle.winner_country]) {
-          countries[battle.winner_country] = 0;
-        }
-
-        if (battle.winner2 !== '') {
-          countries[battle.winner_country] += pointsGained / 2;
-        } else {
-          countries[battle.winner_country] += pointsGained;
-        }
-      }
-
-      if (battle.winner2_country !== '') {
-        if (!countries[battle.winner2_country]) {
-          countries[battle.winner2_country] = 0;
-        }
-
-        countries[battle.winner2_country] += pointsGained / 2;
-      }
-    }
-  });
-
-  let temp = [];
-
-  for (const dancer in dancers) {
-    temp.push({dancer, points: dancers[dancer]});
-  }
-
-  dancers = temp;
-  dancers.sort((a, b) => {
-    if (a.points < b.points) {
-      return 1;
-    } else if (a.points > b.points) {
-      return -1;
+  rankingArray.forEach(dtp => {
+    if (!latestPoints) {
+      dtp.rank = currentRank;
+      latestPoints = dtp.points;
+    } else if (latestPoints === dtp.points) {
+      dtp.rank = currentRank;
+      ties ++;
     } else {
-      return 0;
+      currentRank += + ties + 1;
+      ties = 0;
+      dtp.rank = currentRank;
+      latestPoints = dtp.points;
     }
   });
-
-  temp = [];
-
-  for (const country in countries) {
-    temp.push({country, points: countries[country]});
-  }
-
-  countries = temp;
-  countries.sort((a, b) => {
-    if (a.points < b.points) {
-      return 1;
-    } else if (a.points > b.points) {
-      return -1;
-    } else {
-      return 0;
-    }
-  });
-
-  console.log(dancers);
-  console.log(countries);
 }
 
-calculateRanking();
+function filterDates(dancers, startDate, endDate) {
+  dancers.forEach(dancer => {
+    //console.log(dancer.wins);
+    dancer.wins = dancer.wins.filter(battle => (new Date(battle.start)) >= startDate && (new Date(battle.end)) <= endDate);
+  });
+
+  return dancers;
+}
+
+function printAsCSV(data) {
+  console.log(`rank,dancer,points`);
+
+  data.forEach(dancer => {
+    console.log(`${dancer.rank},${dancer.name},${dancer.points}`);
+  });
+}
