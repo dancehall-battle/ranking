@@ -2,17 +2,18 @@
   "name": "dhb-ranking",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "lib/dancers.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
-    "dhb-ranking": "index.js"
+    "dhb-ranking": "lib/dancers.js"
   },
   "keywords": [],
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "commander": "^2.20.0",
     "date-fns": "^2.0.0-beta.3",
     "graphql-ld": "^1.0.0",
     "graphql-ld-comunica": "^1.0.0"
