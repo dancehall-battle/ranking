@@ -2,8 +2,7 @@
 
 const program = require('commander');
 const path = require('path');
-const rankDancers = require('../lib/dancers');
-const rankCountries = require('../lib/countries');
+const {rankDancers, rankCountries} = require('..');
 const pkg = require(path.resolve(__dirname, '../package.json'));
 const {format} = require('date-fns');
 

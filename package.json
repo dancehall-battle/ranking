@@ -2,12 +2,12 @@
   "name": "dhb-ranking",
   "version": "0.0.1",
   "description": "",
-  "main": "lib/dancers.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
-    "dhb-ranking": "lib/dancers.js"
+    "dhb-ranking": "bin/cli.js"
   },
   "keywords": [],
   "author": "",
