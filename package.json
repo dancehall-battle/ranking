@@ -15,6 +15,7 @@
   "dependencies": {
     "commander": "^2.20.0",
     "date-fns": "^2.0.0-beta.3",
+    "fs-extra": "^8.1.0",
     "graphql-ld": "^1.0.0",
     "graphql-ld-comunica": "^1.0.0"
   }
