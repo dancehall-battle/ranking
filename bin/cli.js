@@ -16,21 +16,28 @@ program
   .option('-r, --ranking [rank]', 'Select for what to receive the ranking: dancer or country.', parseRanking, 'dancer')
   .option('-s, --start-date [date]', `Start date of the range of battles to consider.`, parseDate, oneYearAgo)
   .option('-t, --end-date [date]', 'End date of the range of battles to consider.', parseDate, today)
+  .option('-j, --json-ld', 'Output the ranking as JSON-LD.')
   .option('-v, --verbose', 'Make the tool more talkative.')
   .parse(process.argv);
 
 program.participants = program.participants.split(',');
 
 if (program.verbose) {
-  console.log('Ranking: ' + program.ranking);
-  console.log('Participants: ' + program.participants);
-  console.log('Start date: ' + format(program.startDate, 'yyyy-MM-dd'));
-  console.log('End date: ' + format(program.endDate, 'yyyy-MM-dd'));
-  console.log();
+  console.error('Ranking: ' + program.ranking);
+  console.error('Participants: ' + program.participants);
+  console.error('Start date: ' + format(program.startDate, 'yyyy-MM-dd'));
+  console.error('End date: ' + format(program.endDate, 'yyyy-MM-dd'));
+  console.error();
 }
 
 if (program.ranking === 'dancer') {
-  rankDancers(program.participants, program.startDate, program.endDate);
+  let format = 'csv';
+
+  if (program.jsonLd) {
+    format = 'jsonld';
+  }
+
+  rankDancers(program.participants, program.startDate, program.endDate, format);
 } else {
   rankCountries(program.participants, program.startDate, program.endDate);
 }
