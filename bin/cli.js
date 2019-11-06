@@ -57,7 +57,7 @@ if (program.verbose) {
 if (program.ranking === 'dancer') {
   rankDancers(program.participants, program.startDate, program.endDate, outputFormat, homeAway);
 } else {
-  rankCountries(program.participants, program.startDate, program.endDate);
+  rankCountries(program.participants, program.startDate, program.endDate, outputFormat, homeAway);
 }
 
 function parseParticipants(participants) {
