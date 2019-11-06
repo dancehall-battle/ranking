@@ -54,10 +54,22 @@ if (program.verbose) {
   console.error();
 }
 
-if (program.ranking === 'dancer') {
-  rankDancers(program.participants, program.startDate, program.endDate, outputFormat, homeAway);
-} else {
-  rankCountries(program.participants, program.startDate, program.endDate, outputFormat, homeAway);
+main();
+
+async function main() {
+  let result;
+
+  if (program.ranking === 'dancer') {
+    result = await rankDancers(program.participants, program.startDate, program.endDate, outputFormat, homeAway);
+  } else {
+    result = await rankCountries(program.participants, program.startDate, program.endDate, outputFormat, homeAway);
+  }
+
+  if (outputFormat === 'csv') {
+    console.log(result);
+  } else {
+    console.log(JSON.stringify(result));
+  }
 }
 
 function parseParticipants(participants) {
