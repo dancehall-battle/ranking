@@ -17,27 +17,45 @@ program
   .option('-s, --start-date [date]', `Start date of the range of battles to consider.`, parseDate, oneYearAgo)
   .option('-t, --end-date [date]', 'End date of the range of battles to consider.', parseDate, today)
   .option('-j, --json-ld', 'Output the ranking as JSON-LD.')
+  .option('-h, --only-home', 'Only consider home battles.')
+  .option('-a, --only-away', 'Only consider away battles.')
   .option('-v, --verbose', 'Make the tool more talkative.')
   .parse(process.argv);
 
 program.participants = program.participants.split(',');
+
+if (program.onlyHome && program.onlyAway) {
+  console.error('The options "only home" and "only away" cannot be used at the same time.');
+  process.exit(1);
+}
+
+let outputFormat = 'csv';
+
+if (program.jsonLd) {
+  outputFormat = 'jsonld';
+}
+
+let homeAway = 'both';
+
+if (program.onlyHome) {
+  homeAway = 'home';
+} else if (program.onlyAway) {
+  homeAway = 'away';
+}
 
 if (program.verbose) {
   console.error('Ranking: ' + program.ranking);
   console.error('Participants: ' + program.participants);
   console.error('Start date: ' + format(program.startDate, 'yyyy-MM-dd'));
   console.error('End date: ' + format(program.endDate, 'yyyy-MM-dd'));
+  console.error('Home/away: ' + homeAway);
+  console.error('Output format: ' + outputFormat);
+
   console.error();
 }
 
 if (program.ranking === 'dancer') {
-  let format = 'csv';
-
-  if (program.jsonLd) {
-    format = 'jsonld';
-  }
-
-  rankDancers(program.participants, program.startDate, program.endDate, format);
+  rankDancers(program.participants, program.startDate, program.endDate, outputFormat, homeAway);
 } else {
   rankCountries(program.participants, program.startDate, program.endDate);
 }
