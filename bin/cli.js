@@ -2,7 +2,7 @@
 
 const program = require('commander');
 const path = require('path');
-const {rankDancers, rankCountries} = require('..');
+const {DancerRanker, rankCountries} = require('..');
 const pkg = require(path.resolve(__dirname, '../package.json'));
 const {format} = require('date-fns');
 
@@ -60,7 +60,15 @@ async function main() {
   let result;
 
   if (program.ranking === 'dancer') {
-    result = await rankDancers(program.participants, program.startDate, program.endDate, outputFormat, homeAway);
+    const ranker = new DancerRanker();
+
+    result = await ranker.getRanking({
+      participants: program.participants,
+      startDate: program.startDate,
+      endDate: program.endDate,
+      format: outputFormat,
+      homeAway
+    });
   } else {
     result = await rankCountries(program.participants, program.startDate, program.endDate, outputFormat, homeAway);
   }
