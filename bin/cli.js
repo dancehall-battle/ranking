@@ -16,23 +16,60 @@ program
   .option('-r, --ranking [rank]', 'Select for what to receive the ranking: dancer or country.', parseRanking, 'dancer')
   .option('-s, --start-date [date]', `Start date of the range of battles to consider.`, parseDate, oneYearAgo)
   .option('-t, --end-date [date]', 'End date of the range of battles to consider.', parseDate, today)
+  .option('-j, --json-ld', 'Output the ranking as JSON-LD.')
+  .option('-h, --only-home', 'Only consider home battles.')
+  .option('-a, --only-away', 'Only consider away battles.')
   .option('-v, --verbose', 'Make the tool more talkative.')
   .parse(process.argv);
 
 program.participants = program.participants.split(',');
 
-if (program.verbose) {
-  console.log('Ranking: ' + program.ranking);
-  console.log('Participants: ' + program.participants);
-  console.log('Start date: ' + format(program.startDate, 'yyyy-MM-dd'));
-  console.log('End date: ' + format(program.endDate, 'yyyy-MM-dd'));
-  console.log();
+if (program.onlyHome && program.onlyAway) {
+  console.error('The options "only home" and "only away" cannot be used at the same time.');
+  process.exit(1);
 }
 
-if (program.ranking === 'dancer') {
-  rankDancers(program.participants, program.startDate, program.endDate);
-} else {
-  rankCountries(program.participants, program.startDate, program.endDate);
+let outputFormat = 'csv';
+
+if (program.jsonLd) {
+  outputFormat = 'jsonld';
+}
+
+let homeAway = 'both';
+
+if (program.onlyHome) {
+  homeAway = 'home';
+} else if (program.onlyAway) {
+  homeAway = 'away';
+}
+
+if (program.verbose) {
+  console.error('Ranking: ' + program.ranking);
+  console.error('Participants: ' + program.participants);
+  console.error('Start date: ' + format(program.startDate, 'yyyy-MM-dd'));
+  console.error('End date: ' + format(program.endDate, 'yyyy-MM-dd'));
+  console.error('Home/away: ' + homeAway);
+  console.error('Output format: ' + outputFormat);
+
+  console.error();
+}
+
+main();
+
+async function main() {
+  let result;
+
+  if (program.ranking === 'dancer') {
+    result = await rankDancers(program.participants, program.startDate, program.endDate, outputFormat, homeAway);
+  } else {
+    result = await rankCountries(program.participants, program.startDate, program.endDate, outputFormat, homeAway);
+  }
+
+  if (outputFormat === 'csv') {
+    console.log(result);
+  } else {
+    console.log(JSON.stringify(result));
+  }
 }
 
 function parseParticipants(participants) {
