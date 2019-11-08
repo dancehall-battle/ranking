@@ -2,7 +2,7 @@
 
 const program = require('commander');
 const path = require('path');
-const {DancerRanker, rankCountries} = require('..');
+const {DancerRanker, CountryRanker} = require('..');
 const pkg = require(path.resolve(__dirname, '../package.json'));
 const {format} = require('date-fns');
 
@@ -57,21 +57,21 @@ if (program.verbose) {
 main();
 
 async function main() {
-  let result;
+  let ranker;
 
   if (program.ranking === 'dancer') {
-    const ranker = new DancerRanker();
-
-    result = await ranker.getRanking({
-      participants: program.participants,
-      startDate: program.startDate,
-      endDate: program.endDate,
-      format: outputFormat,
-      homeAway
-    });
+    ranker = new DancerRanker();
   } else {
-    result = await rankCountries(program.participants, program.startDate, program.endDate, outputFormat, homeAway);
+    ranker = new CountryRanker();
   }
+
+  const result = await ranker.getRanking({
+    participants: program.participants,
+    startDate: program.startDate,
+    endDate: program.endDate,
+    format: outputFormat,
+    homeAway
+  });
 
   if (outputFormat === 'csv') {
     console.log(result);
