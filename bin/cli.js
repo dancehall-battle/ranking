@@ -80,6 +80,11 @@ async function main() {
   }
 }
 
+
+/**
+ * Helper functions
+ */
+
 function parseParticipants(participants) {
   if (participants) {
     const temp = participants.split(',');
