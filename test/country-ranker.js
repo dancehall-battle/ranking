@@ -202,7 +202,7 @@ describe('CountryRanker', function() {
     getRank(result.items, 'md').should.equal(4);
   });
 
-  it('1 vs 1 , 2 vs 2, home/away', async () => {
+  it('1 vs 1, 2 vs 2, home/away', async () => {
     const ranker = new CountryRanker();
 
     const result = await ranker.getRanking({

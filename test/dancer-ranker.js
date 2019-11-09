@@ -270,7 +270,7 @@ describe('DancerRanker', function() {
     getRank(result.items, 'https://dancehallbattle.org/dancer/tristan').should.equal(16);
   });
 
-  it('1 vs 1,  home/away, no female', async () => {
+  it('1 vs 1, home/away, no female', async () => {
     const ranker = new DancerRanker();
 
     const result = await ranker.getRanking({
@@ -309,7 +309,7 @@ describe('DancerRanker', function() {
     getRank(result.items, 'https://dancehallbattle.org/dancer/morris').should.equal(10);
   });
 
-  it('2 vs 2,  home/away, no female', async () => {
+  it('2 vs 2, home/away, no female', async () => {
     const ranker = new DancerRanker();
 
     const result = await ranker.getRanking({
