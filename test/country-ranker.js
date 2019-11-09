@@ -123,6 +123,84 @@ describe('CountryRanker', function() {
 
     getRank(result.items, 'ua').should.equal(1);
   });
+
+  it('05', async () => {
+    const ranker = new CountryRanker();
+
+    const result = await ranker.getRanking({
+      participants: ['1', '2'],
+      startDate: new Date('2019-01-01'),
+      endDate: new Date('2019-01-31'),
+      format: 'jsonld',
+      homeAway: 'away',
+      tpfServer: 'http://localhost:3000/data'
+    });
+
+    result.items.should.have.lengthOf(3);
+    getPoints(result.items, 'fr').should.equal(18);
+    getPoints(result.items, 'be').should.equal(18);
+    getPoints(result.items, 'se').should.equal(18);
+
+    getRank(result.items, 'fr').should.equal(1);
+    getRank(result.items, 'be').should.equal(1);
+    getRank(result.items, 'se').should.equal(1);
+  });
+
+  it('06', async () => {
+    const ranker = new CountryRanker();
+
+    const result = await ranker.getRanking({
+      participants: ['1', '2'],
+      startDate: new Date('2019-01-01'),
+      endDate: new Date('2019-02-28'),
+      format: 'jsonld',
+      homeAway: 'away',
+      tpfServer: 'http://localhost:3000/data'
+    });
+
+    result.items.should.have.lengthOf(5);
+    getPoints(result.items, 'fr').should.equal(35);
+    getPoints(result.items, 'be').should.equal(17);
+    getPoints(result.items, 'se').should.equal(17);
+    getPoints(result.items, 'ua').should.equal(18);
+    getPoints(result.items, 'ro').should.equal(18);
+
+    getRank(result.items, 'fr').should.equal(1);
+    getRank(result.items, 'ua').should.equal(2);
+    getRank(result.items, 'ro').should.equal(2);
+    getRank(result.items, 'be').should.equal(4);
+    getRank(result.items, 'se').should.equal(4);
+  });
+
+  it('07', async () => {
+    const ranker = new CountryRanker();
+
+    const result = await ranker.getRanking({
+      participants: ['1', '2'],
+      startDate: new Date('2019-01-01'),
+      endDate: new Date('2019-02-28'),
+      format: 'jsonld',
+      homeAway: 'home',
+      tpfServer: 'http://localhost:3000/data'
+    });
+
+    console.log(result);
+
+    result.items.should.have.lengthOf(6);
+    getPoints(result.items, 'it').should.equal(35);
+    getPoints(result.items, 'kz').should.equal(18);
+    getPoints(result.items, 'pt').should.equal(18);
+    getPoints(result.items, 'fr').should.equal(18);
+    getPoints(result.items, 'ua').should.equal(36);
+    getPoints(result.items, 'ru').should.equal(54);
+
+    getRank(result.items, 'ru').should.equal(1);
+    getRank(result.items, 'ua').should.equal(2);
+    getRank(result.items, 'it').should.equal(3);
+    getRank(result.items, 'kz').should.equal(4);
+    getRank(result.items, 'pt').should.equal(4);
+    getRank(result.items, 'fr').should.equal(4);
+  });
 });
 
 function getPoints(items, country) {
