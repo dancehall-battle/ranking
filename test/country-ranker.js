@@ -184,22 +184,58 @@ describe('CountryRanker', function() {
       tpfServer: 'http://localhost:3000/data'
     });
 
-    console.log(result);
-
-    result.items.should.have.lengthOf(6);
+    result.items.should.have.lengthOf(7);
     getPoints(result.items, 'it').should.equal(35);
     getPoints(result.items, 'kz').should.equal(18);
     getPoints(result.items, 'pt').should.equal(18);
     getPoints(result.items, 'fr').should.equal(18);
-    getPoints(result.items, 'ua').should.equal(36);
+    getPoints(result.items, 'ua').should.equal(54);
     getPoints(result.items, 'ru').should.equal(54);
+    getPoints(result.items, 'md').should.equal(18);
 
     getRank(result.items, 'ru').should.equal(1);
-    getRank(result.items, 'ua').should.equal(2);
+    getRank(result.items, 'ua').should.equal(1);
     getRank(result.items, 'it').should.equal(3);
     getRank(result.items, 'kz').should.equal(4);
     getRank(result.items, 'pt').should.equal(4);
     getRank(result.items, 'fr').should.equal(4);
+    getRank(result.items, 'md').should.equal(4);
+  });
+
+  it('08', async () => {
+    const ranker = new CountryRanker();
+
+    const result = await ranker.getRanking({
+      participants: ['1', '2'],
+      startDate: new Date('2019-01-01'),
+      endDate: new Date('2019-02-28'),
+      format: 'jsonld',
+      homeAway: 'both',
+      tpfServer: 'http://localhost:3000/data'
+    });
+
+    result.items.should.have.lengthOf(10);
+    getPoints(result.items, 'it').should.equal(35);
+    getPoints(result.items, 'kz').should.equal(18);
+    getPoints(result.items, 'pt').should.equal(18);
+    getPoints(result.items, 'fr').should.equal(18+35); // 53
+    getPoints(result.items, 'ua').should.equal(54+18); // 72
+    getPoints(result.items, 'ru').should.equal(54);
+    getPoints(result.items, 'md').should.equal(18);
+    getPoints(result.items, 'be').should.equal(17);
+    getPoints(result.items, 'se').should.equal(17);
+    getPoints(result.items, 'ro').should.equal(18);
+
+    getRank(result.items, 'ua').should.equal(1);
+    getRank(result.items, 'ru').should.equal(2);
+    getRank(result.items, 'fr').should.equal(3);
+    getRank(result.items, 'it').should.equal(4);
+    getRank(result.items, 'pt').should.equal(5);
+    getRank(result.items, 'kz').should.equal(5);
+    getRank(result.items, 'md').should.equal(5);
+    getRank(result.items, 'ro').should.equal(5);
+    getRank(result.items, 'be').should.equal(9);
+    getRank(result.items, 'se').should.equal(9);
   });
 });
 
