@@ -13,8 +13,8 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "commander": "^2.20.0",
-    "date-fns": "^2.6.0",
+    "commander": "^4.0.0",
+    "date-fns": "^2.7.0",
     "fs-extra": "^8.1.0",
     "graphql-ld": "^1.0.0",
     "graphql-ld-comunica": "^1.0.0"
