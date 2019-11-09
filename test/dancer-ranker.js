@@ -195,8 +195,6 @@ describe('DancerRanker', function() {
       removeFemaleBattles: true
     });
 
-    console.log(result);
-
     result.items.should.have.lengthOf(10);
     getPoints(result.items, 'https://dancehallbattle.org/dancer/stream').should.equal(36);
     getPoints(result.items, 'https://dancehallbattle.org/dancer/aliyaashadullina').should.equal(18);
@@ -209,17 +207,20 @@ describe('DancerRanker', function() {
     getPoints(result.items, 'https://dancehallbattle.org/dancer/sabinafattakhova').should.equal(9);
     getPoints(result.items, 'https://dancehallbattle.org/dancer/elinanugmanova').should.equal(9);
 
-    getRank(result.items, 'ru').should.equal(1);
-    getRank(result.items, 'ua').should.equal(1);
-    getRank(result.items, 'it').should.equal(3);
-    getRank(result.items, 'kz').should.equal(4);
-    getRank(result.items, 'pt').should.equal(4);
-    getRank(result.items, 'fr').should.equal(4);
-    getRank(result.items, 'md').should.equal(4);
+    getRank(result.items, 'https://dancehallbattle.org/dancer/stream').should.equal(1);
+    getRank(result.items, 'https://dancehallbattle.org/dancer/aliyaashadullina').should.equal(2);
+    getRank(result.items, 'https://dancehallbattle.org/dancer/oscar').should.equal(2);
+    getRank(result.items, 'https://dancehallbattle.org/dancer/gato').should.equal(2);
+    getRank(result.items, 'https://dancehallbattle.org/dancer/dingo').should.equal(2);
+    getRank(result.items, 'https://dancehallbattle.org/dancer/martasilva').should.equal(2);
+    getRank(result.items, 'https://dancehallbattle.org/dancer/sonechka_mkshva').should.equal(2);
+    getRank(result.items, 'https://dancehallbattle.org/dancer/future').should.equal(8);
+    getRank(result.items, 'https://dancehallbattle.org/dancer/sabinafattakhova').should.equal(9);
+    getRank(result.items, 'https://dancehallbattle.org/dancer/elinanugmanova').should.equal(9);
   });
 
-  it('08', async () => {
-    const ranker = new CountryRanker();
+  it('1 vs 1, 2 vs 2, home/away, no female', async () => {
+    const ranker = new DancerRanker();
 
     const result = await ranker.getRanking({
       participants: ['1', '2'],
@@ -227,31 +228,114 @@ describe('DancerRanker', function() {
       endDate: new Date('2019-02-28'),
       format: 'jsonld',
       homeAway: 'both',
-      tpfServer: 'http://localhost:3000/data'
+      tpfServer: 'http://localhost:3000/data',
+      removeFemaleBattles: true
     });
 
-    result.items.should.have.lengthOf(10);
-    getPoints(result.items, 'it').should.equal(35);
-    getPoints(result.items, 'kz').should.equal(18);
-    getPoints(result.items, 'pt').should.equal(18);
-    getPoints(result.items, 'fr').should.equal(18+35); // 53
-    getPoints(result.items, 'ua').should.equal(54+18); // 72
-    getPoints(result.items, 'ru').should.equal(54);
-    getPoints(result.items, 'md').should.equal(18);
-    getPoints(result.items, 'be').should.equal(17);
-    getPoints(result.items, 'se').should.equal(17);
-    getPoints(result.items, 'ro').should.equal(18);
+    result.items.should.have.lengthOf(17);
+    getPoints(result.items, 'https://dancehallbattle.org/dancer/stream').should.equal(36);
+    getPoints(result.items, 'https://dancehallbattle.org/dancer/aliyaashadullina').should.equal(18);
+    getPoints(result.items, 'https://dancehallbattle.org/dancer/oscar').should.equal(18);
+    getPoints(result.items, 'https://dancehallbattle.org/dancer/gato').should.equal(18);
+    getPoints(result.items, 'https://dancehallbattle.org/dancer/dingo').should.equal(18);
+    getPoints(result.items, 'https://dancehallbattle.org/dancer/martasilva').should.equal(18);
+    getPoints(result.items, 'https://dancehallbattle.org/dancer/sonechka_mkshva').should.equal(18);
+    getPoints(result.items, 'https://dancehallbattle.org/dancer/future').should.equal(17);
+    getPoints(result.items, 'https://dancehallbattle.org/dancer/sabinafattakhova').should.equal(9);
+    getPoints(result.items, 'https://dancehallbattle.org/dancer/elinanugmanova').should.equal(9);
+    getPoints(result.items, 'https://dancehallbattle.org/dancer/morris').should.equal(17);
+    getPoints(result.items, 'https://dancehallbattle.org/dancer/mylana').should.equal(8.5);
+    getPoints(result.items, 'https://dancehallbattle.org/dancer/tristan').should.equal(8.5);
+    getPoints(result.items, 'https://dancehallbattle.org/dancer/katia').should.equal(18);
+    getPoints(result.items, 'https://dancehallbattle.org/dancer/razvan').should.equal(18);
+    getPoints(result.items, 'https://dancehallbattle.org/dancer/louvto').should.equal(9);
+    getPoints(result.items, 'https://dancehallbattle.org/dancer/rudy').should.equal(9);
 
-    getRank(result.items, 'ua').should.equal(1);
-    getRank(result.items, 'ru').should.equal(2);
-    getRank(result.items, 'fr').should.equal(3);
-    getRank(result.items, 'it').should.equal(4);
-    getRank(result.items, 'pt').should.equal(5);
-    getRank(result.items, 'kz').should.equal(5);
-    getRank(result.items, 'md').should.equal(5);
-    getRank(result.items, 'ro').should.equal(5);
-    getRank(result.items, 'be').should.equal(9);
-    getRank(result.items, 'se').should.equal(9);
+    getRank(result.items, 'https://dancehallbattle.org/dancer/stream').should.equal(1);
+    getRank(result.items, 'https://dancehallbattle.org/dancer/aliyaashadullina').should.equal(2);
+    getRank(result.items, 'https://dancehallbattle.org/dancer/oscar').should.equal(2);
+    getRank(result.items, 'https://dancehallbattle.org/dancer/gato').should.equal(2);
+    getRank(result.items, 'https://dancehallbattle.org/dancer/dingo').should.equal(2);
+    getRank(result.items, 'https://dancehallbattle.org/dancer/martasilva').should.equal(2);
+    getRank(result.items, 'https://dancehallbattle.org/dancer/sonechka_mkshva').should.equal(2);
+    getRank(result.items, 'https://dancehallbattle.org/dancer/katia').should.equal(2);
+    getRank(result.items, 'https://dancehallbattle.org/dancer/razvan').should.equal(2);
+    getRank(result.items, 'https://dancehallbattle.org/dancer/future').should.equal(10);
+    getRank(result.items, 'https://dancehallbattle.org/dancer/morris').should.equal(10);
+    getRank(result.items, 'https://dancehallbattle.org/dancer/sabinafattakhova').should.equal(12);
+    getRank(result.items, 'https://dancehallbattle.org/dancer/elinanugmanova').should.equal(12);
+    getRank(result.items, 'https://dancehallbattle.org/dancer/louvto').should.equal(12);
+    getRank(result.items, 'https://dancehallbattle.org/dancer/rudy').should.equal(12);
+    getRank(result.items, 'https://dancehallbattle.org/dancer/mylana').should.equal(16);
+    getRank(result.items, 'https://dancehallbattle.org/dancer/tristan').should.equal(16);
+  });
+
+  it('1 vs 1,  home/away, no female', async () => {
+    const ranker = new DancerRanker();
+
+    const result = await ranker.getRanking({
+      participants: ['1'],
+      startDate: new Date('2019-01-01'),
+      endDate: new Date('2019-02-28'),
+      format: 'jsonld',
+      homeAway: 'both',
+      tpfServer: 'http://localhost:3000/data',
+      removeFemaleBattles: true
+    });
+
+    result.items.should.have.lengthOf(11);
+    getPoints(result.items, 'https://dancehallbattle.org/dancer/stream').should.equal(36);
+    getPoints(result.items, 'https://dancehallbattle.org/dancer/aliyaashadullina').should.equal(18);
+    getPoints(result.items, 'https://dancehallbattle.org/dancer/oscar').should.equal(18);
+    getPoints(result.items, 'https://dancehallbattle.org/dancer/gato').should.equal(18);
+    getPoints(result.items, 'https://dancehallbattle.org/dancer/dingo').should.equal(18);
+    getPoints(result.items, 'https://dancehallbattle.org/dancer/martasilva').should.equal(18);
+    getPoints(result.items, 'https://dancehallbattle.org/dancer/sonechka_mkshva').should.equal(18);
+    getPoints(result.items, 'https://dancehallbattle.org/dancer/future').should.equal(17);
+    getPoints(result.items, 'https://dancehallbattle.org/dancer/morris').should.equal(17);
+    getPoints(result.items, 'https://dancehallbattle.org/dancer/katia').should.equal(18);
+    getPoints(result.items, 'https://dancehallbattle.org/dancer/razvan').should.equal(18);
+
+    getRank(result.items, 'https://dancehallbattle.org/dancer/stream').should.equal(1);
+    getRank(result.items, 'https://dancehallbattle.org/dancer/aliyaashadullina').should.equal(2);
+    getRank(result.items, 'https://dancehallbattle.org/dancer/oscar').should.equal(2);
+    getRank(result.items, 'https://dancehallbattle.org/dancer/gato').should.equal(2);
+    getRank(result.items, 'https://dancehallbattle.org/dancer/dingo').should.equal(2);
+    getRank(result.items, 'https://dancehallbattle.org/dancer/martasilva').should.equal(2);
+    getRank(result.items, 'https://dancehallbattle.org/dancer/sonechka_mkshva').should.equal(2);
+    getRank(result.items, 'https://dancehallbattle.org/dancer/katia').should.equal(2);
+    getRank(result.items, 'https://dancehallbattle.org/dancer/razvan').should.equal(2);
+    getRank(result.items, 'https://dancehallbattle.org/dancer/future').should.equal(10);
+    getRank(result.items, 'https://dancehallbattle.org/dancer/morris').should.equal(10);
+  });
+
+  it('2 vs 2,  home/away, no female', async () => {
+    const ranker = new DancerRanker();
+
+    const result = await ranker.getRanking({
+      participants: ['2'],
+      startDate: new Date('2019-01-01'),
+      endDate: new Date('2019-02-28'),
+      format: 'jsonld',
+      homeAway: 'both',
+      tpfServer: 'http://localhost:3000/data',
+      removeFemaleBattles: true
+    });
+
+    result.items.should.have.lengthOf(6);
+    getPoints(result.items, 'https://dancehallbattle.org/dancer/sabinafattakhova').should.equal(9);
+    getPoints(result.items, 'https://dancehallbattle.org/dancer/elinanugmanova').should.equal(9);
+    getPoints(result.items, 'https://dancehallbattle.org/dancer/mylana').should.equal(8.5);
+    getPoints(result.items, 'https://dancehallbattle.org/dancer/tristan').should.equal(8.5);
+    getPoints(result.items, 'https://dancehallbattle.org/dancer/louvto').should.equal(9);
+    getPoints(result.items, 'https://dancehallbattle.org/dancer/rudy').should.equal(9);
+
+    getRank(result.items, 'https://dancehallbattle.org/dancer/sabinafattakhova').should.equal(1);
+    getRank(result.items, 'https://dancehallbattle.org/dancer/elinanugmanova').should.equal(1);
+    getRank(result.items, 'https://dancehallbattle.org/dancer/louvto').should.equal(1);
+    getRank(result.items, 'https://dancehallbattle.org/dancer/rudy').should.equal(1);
+    getRank(result.items, 'https://dancehallbattle.org/dancer/mylana').should.equal(5);
+    getRank(result.items, 'https://dancehallbattle.org/dancer/tristan').should.equal(5);
   });
 });
 
