@@ -1,4 +1,4 @@
 module.exports = {
-  DancerRanker: require('./lib/dancers'),
-  CountryRanker: require('./lib/countries')
+  DancerRanker: require('./lib/dancer-ranker'),
+  CountryRanker: require('./lib/country-ranker')
 };
