@@ -19,6 +19,7 @@ program
   .option('-j, --json-ld', 'Output the ranking as JSON-LD.')
   .option('-h, --only-home', 'Only consider home battles.')
   .option('-a, --only-away', 'Only consider away battles.')
+  .option('-f, --no-female-battles', 'Remove female battles.')
   .option('-v, --verbose', 'Make the tool more talkative.')
   .parse(process.argv);
 
@@ -30,6 +31,7 @@ if (program.onlyHome && program.onlyAway) {
 }
 
 let outputFormat = 'csv';
+let removeFemaleBattles = !program.femaleBattles;
 
 if (program.jsonLd) {
   outputFormat = 'jsonld';
@@ -50,6 +52,7 @@ if (program.verbose) {
   console.error('End date: ' + format(program.endDate, 'yyyy-MM-dd'));
   console.error('Home/away: ' + homeAway);
   console.error('Output format: ' + outputFormat);
+  console.error('Remove female battles: ' + removeFemaleBattles);
 
   console.error();
 }
@@ -70,7 +73,8 @@ async function main() {
     startDate: program.startDate,
     endDate: program.endDate,
     format: outputFormat,
-    homeAway
+    homeAway,
+    removeFemaleBattles
   });
 
   if (outputFormat === 'csv') {
