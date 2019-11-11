@@ -101,6 +101,7 @@ describe('DancerRanker', function() {
       removeFemaleBattles: true
     });
 
+    result['@type'].should.include('dhb:HomeRanking');
     result.items.should.have.lengthOf(2);
     getPoints(result.items, 'https://dancehallbattle.org/dancer/gato').should.equal(18);
     getPoints(result.items, 'https://dancehallbattle.org/dancer/dimitriskaklamanis').should.equal(18);
@@ -122,6 +123,7 @@ describe('DancerRanker', function() {
       removeFemaleBattles: true
     });
 
+    result['@type'].should.include('dhb:AwayRanking');
     result.items.should.have.lengthOf(1);
     getPoints(result.items, 'https://dancehallbattle.org/dancer/katrinwow').should.equal(17);
 
@@ -141,6 +143,7 @@ describe('DancerRanker', function() {
       removeFemaleBattles: true
     });
 
+    result['@type'].should.include('dhb:AwayRanking');
     result.items.should.have.lengthOf(3);
     getPoints(result.items, 'https://dancehallbattle.org/dancer/morris').should.equal(18);
     getPoints(result.items, 'https://dancehallbattle.org/dancer/mylana').should.equal(9);
@@ -164,6 +167,7 @@ describe('DancerRanker', function() {
       removeFemaleBattles: true
     });
 
+    result['@type'].should.include('dhb:AwayRanking');
     result.items.should.have.lengthOf(7);
     getPoints(result.items, 'https://dancehallbattle.org/dancer/morris').should.equal(17);
     getPoints(result.items, 'https://dancehallbattle.org/dancer/mylana').should.equal(8.5);
@@ -195,6 +199,7 @@ describe('DancerRanker', function() {
       removeFemaleBattles: true
     });
 
+    result['@type'].should.include('dhb:HomeRanking');
     result.items.should.have.lengthOf(10);
     getPoints(result.items, 'https://dancehallbattle.org/dancer/stream').should.equal(36);
     getPoints(result.items, 'https://dancehallbattle.org/dancer/aliyaashadullina').should.equal(18);

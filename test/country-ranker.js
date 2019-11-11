@@ -98,6 +98,7 @@ describe('CountryRanker', function() {
       tpfServer: 'http://localhost:3000/data'
     });
 
+    result['@type'].should.include('dhb:HomeRanking');
     result.items.should.have.lengthOf(2);
     getPoints(result.items, 'fr').should.equal(18);
     getPoints(result.items, 'gr').should.equal(18);
@@ -118,6 +119,7 @@ describe('CountryRanker', function() {
       tpfServer: 'http://localhost:3000/data'
     });
 
+    result['@type'].should.include('dhb:AwayRanking');
     result.items.should.have.lengthOf(1);
     getPoints(result.items, 'ua').should.equal(17);
 
@@ -136,6 +138,7 @@ describe('CountryRanker', function() {
       tpfServer: 'http://localhost:3000/data'
     });
 
+    result['@type'].should.include('dhb:AwayRanking');
     result.items.should.have.lengthOf(3);
     getPoints(result.items, 'fr').should.equal(18);
     getPoints(result.items, 'be').should.equal(18);
@@ -157,6 +160,8 @@ describe('CountryRanker', function() {
       homeAway: 'away',
       tpfServer: 'http://localhost:3000/data'
     });
+
+    result['@type'].should.include('dhb:AwayRanking');
 
     result.items.should.have.lengthOf(5);
     getPoints(result.items, 'fr').should.equal(35);
@@ -183,6 +188,8 @@ describe('CountryRanker', function() {
       homeAway: 'home',
       tpfServer: 'http://localhost:3000/data'
     });
+
+    result['@type'].should.include('dhb:HomeRanking');
 
     result.items.should.have.lengthOf(7);
     getPoints(result.items, 'it').should.equal(35);
