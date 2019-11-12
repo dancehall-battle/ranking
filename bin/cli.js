@@ -20,6 +20,7 @@ program
   .option('-h, --only-home', 'Only consider home battles.')
   .option('-a, --only-away', 'Only consider away battles.')
   .option('-f, --no-female-battles', 'Remove female battles.')
+  .option('-c, --scale', 'Scale away ranking.')
   .option('-v, --verbose', 'Make the tool more talkative.')
   .parse(process.argv);
 
@@ -51,6 +52,7 @@ if (program.verbose) {
   console.error('Start date: ' + format(program.startDate, 'yyyy-MM-dd'));
   console.error('End date: ' + format(program.endDate, 'yyyy-MM-dd'));
   console.error('Home/away: ' + homeAway);
+  console.error('Scale away ranking: ' + program.scale);
   console.error('Output format: ' + outputFormat);
   console.error('Remove female battles: ' + removeFemaleBattles);
 
@@ -74,7 +76,8 @@ async function main() {
     endDate: program.endDate,
     format: outputFormat,
     homeAway,
-    removeFemaleBattles
+    removeFemaleBattles,
+    scale: program.scale
   });
 
   if (outputFormat === 'csv') {

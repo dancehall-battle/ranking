@@ -177,6 +177,35 @@ describe('CountryRanker', function() {
     getRank(result.items, 'se').should.equal(4);
   });
 
+  it('1 vs 1, 2 vs 2, away (scaled)', async () => {
+    const ranker = new CountryRanker();
+
+    const result = await ranker.getRanking({
+      participants: ['1', '2'],
+      startDate: new Date('2019-01-01'),
+      endDate: new Date('2019-02-28'),
+      format: 'jsonld',
+      homeAway: 'away',
+      tpfServer: 'http://localhost:3000/data',
+      scale: true
+    });
+
+    result['@type'].should.include('dhb:AwayRanking');
+
+    result.items.should.have.lengthOf(5);
+    getPoints(result.items, 'fr').should.equal(11589);
+    getPoints(result.items, 'be').should.equal(5313);
+    getPoints(result.items, 'se').should.equal(5629);
+    getPoints(result.items, 'ua').should.equal(6767);
+    getPoints(result.items, 'ro').should.equal(5625);
+
+    getRank(result.items, 'fr').should.equal(1);
+    getRank(result.items, 'ua').should.equal(2);
+    getRank(result.items, 'ro').should.equal(4);
+    getRank(result.items, 'be').should.equal(5);
+    getRank(result.items, 'se').should.equal(3);
+  });
+
   it('1 vs 1, 2 vs 2, home', async () => {
     const ranker = new CountryRanker();
 
