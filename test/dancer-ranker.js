@@ -55,6 +55,7 @@ describe('DancerRanker', function() {
       removeFemaleBattles: true
     });
 
+    result['@type'].should.include('dhb:1vs1Ranking');
     result.items.should.have.lengthOf(3);
     getPoints(result.items, 'https://dancehallbattle.org/dancer/gato').should.equal(18);
     getPoints(result.items, 'https://dancehallbattle.org/dancer/dimitriskaklamanis').should.equal(18);
@@ -355,7 +356,7 @@ function getRank(items, dancerIRI) {
 function getPropertyFromItem(items, dancerIRI, prop) {
   let i = 0;
 
-  while (i < items.length && items[i].dancer !== dancerIRI) {
+  while (i < items.length && items[i].dancer['@id'] !== dancerIRI) {
     i ++;
   }
 
