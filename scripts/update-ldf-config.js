@@ -2,7 +2,6 @@ const fs = require('fs-extra');
 const program = require('commander');
 const path = require('path');
 const pkg = require(path.resolve(__dirname, '../package.json'));
-const { format } = require('date-fns');
 
 program
   .version(pkg.version)
