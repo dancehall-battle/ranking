@@ -17,6 +17,7 @@ program
   .option('-s, --start-date [date]', `Start date of the range of battles to consider.`, parseDate, oneYearAgo)
   .option('-t, --end-date [date]', 'End date of the range of battles to consider.', parseDate, today)
   .option('-j, --json-ld', 'Output the ranking as JSON-LD.')
+  .option('-d, --rdf', 'Output the ranking as RDF (N-Triples).')
   .option('-h, --only-home', 'Only consider home battles.')
   .option('-a, --only-away', 'Only consider away battles.')
   .option('-f, --no-female-battles', 'Remove female battles.')
@@ -36,6 +37,8 @@ let removeFemaleBattles = !program.femaleBattles;
 
 if (program.jsonLd) {
   outputFormat = 'jsonld';
+} else if (program.rdf) {
+  outputFormat = 'ntriples';
 }
 
 let homeAway = 'both';
@@ -80,9 +83,9 @@ async function main() {
     scale: program.scale
   });
 
-  if (outputFormat === 'csv') {
+  if (outputFormat === 'csv' || outputFormat === 'ntriples') {
     console.log(result);
-  } else {
+  } else if (outputFormat === 'jsonld') {
     console.log(JSON.stringify(result));
   }
 }
