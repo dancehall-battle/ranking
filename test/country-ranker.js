@@ -54,6 +54,8 @@ describe('CountryRanker', function() {
       tpfServer: 'http://localhost:3000/data'
     });
 
+    console.log(result);
+
     result.items.should.have.lengthOf(3);
     getPoints(result.items, 'fr').should.equal(18);
     getPoints(result.items, 'gr').should.equal(18);
