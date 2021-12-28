@@ -16,9 +16,9 @@
     "commander": "^4.0.0",
     "date-fns": "^2.7.0",
     "fs-extra": "^8.1.0",
-    "graphql-ld": "^1.0.0",
-    "graphql-ld-comunica": "^1.0.0",
-    "jsonld": "^1.8.1"
+    "graphql-ld": "^1.4.0",
+    "graphql-ld-comunica": "^1.2.1",
+    "jsonld": "^5.2.0"
   },
   "devDependencies": {
     "chai": "^4.2.0",
