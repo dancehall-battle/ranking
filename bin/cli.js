@@ -22,6 +22,7 @@ program
   .option('-a, --only-away', 'Only consider away battles.')
   .option('-f, --no-female-battles', 'Remove female battles.')
   .option('-c, --scale', 'Scale away ranking.')
+  .requiredOption('-e, --tpf-server [url]', 'TPF server url.')
   .option('-v, --verbose', 'Make the tool more talkative.')
   .parse(process.argv);
 
@@ -80,7 +81,8 @@ async function main() {
     format: outputFormat,
     homeAway,
     removeFemaleBattles,
-    scale: program.scale
+    scale: program.scale,
+    tpfServer: program.tpfServer
   });
 
   if (outputFormat === 'csv' || outputFormat === 'ntriples') {
