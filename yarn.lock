@@ -2118,10 +2118,10 @@ graceful-fs@^4.1.6, graceful-fs@^4.2.0:
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.2.tgz#6f0952605d0140c1cfdb138ed005775b92d67b02"
   integrity sha512-IItsdsea19BoLC7ELy13q1iJFNmd7ofZH5+X/pJr90/nRoPEX0DJo1dHDbgtYWOhJhcCgMDTOw84RZ72q6lB+Q==
 
-graphql-ld-comunica@^1.2.1:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/graphql-ld-comunica/-/graphql-ld-comunica-1.2.1.tgz#5e3e0ed2322912807bc9e6e963a4ad11f2a65968"
-  integrity sha512-DQRXrisavfK++6MZTzZjDQ/cUOwReheL5twcBu+uU8tPPGq7yhuJvqgg4BgN0B1KOCqgJ7YgNT3FZK0IOHuWMg==
+graphql-ld-comunica@^1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/graphql-ld-comunica/-/graphql-ld-comunica-1.2.2.tgz#90095b4be2c6bdca98348ff97b3d877c7c25ab4d"
+  integrity sha512-C1akojdgiNwBFjqqQ3v9fNinww9TBg1Rijgsde0+xnYL7S8ELVcx+in6mmmrs2k+AG9WIjrsAzDfNFwQ4U2gQA==
   dependencies:
     "@comunica/actor-init-sparql" "^1.20.0"
     graphql-ld "^1.2.0"
@@ -2131,6 +2131,17 @@ graphql-ld@^1.2.0, graphql-ld@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/graphql-ld/-/graphql-ld-1.4.0.tgz#aab1a42459ad25b589ddfbddf2202a6eb9aa975b"
   integrity sha512-HCxUJ6Rm+6xj9iK8D2FW/Nd2kKBiEe8j1AsNpl5mdEAan3LJWwfG4Fb1gUaaVkRIswrROM6HdSfyd73+vmZoBg==
+  dependencies:
+    "@rdfjs/types" "*"
+    graphql-to-sparql "^2.4.0"
+    jsonld-context-parser "^2.1.0"
+    sparqlalgebrajs "^3.0.2"
+    sparqljson-to-tree "^2.1.0"
+
+graphql-ld@^1.4.1:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/graphql-ld/-/graphql-ld-1.4.1.tgz#3fd4e187273c41a79443664eebdef3ef773f0d3a"
+  integrity sha512-oJ8o/1DdAbM+oNE9FBnc0bbWgzvImnl/o2fty2NzA4nyj4T6HNbAkr1CcUL9OieSZPEAW7QcU7W66OVHkxDwVw==
   dependencies:
     "@rdfjs/types" "*"
     graphql-to-sparql "^2.4.0"
